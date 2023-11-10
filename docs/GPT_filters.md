@@ -29,3 +29,27 @@ Then, see if it's possible to limit the range of years.
 4. "Home Alone" (1990)
 5. "Teenage Mutant Ninja Turtles II: The Secret of the Ooze" (1991)
 ```
+
+The same can be done for the genre.
+
+## Can you suggest 5 movies from the comedy genre that have the same vibe as turkey dinner? Send the response as a list with each item in its new line as "Name (year)"
+
+```
+1. "Planes, Trains, and Automobiles (1987)"
+2. "Home Alone (1990)"
+3. "The Family Stone (2005)"
+4. "Christmas Vacation (1989)"
+5. "Four Christmases (2008)"
+```
+
+If someone wants to adjust the length of the movie, they can do that too.
+
+## Can you suggest 5 movies that are shorter than 2 hours that have the same vibe as a ham sandwich? Send the response as a list with each item in its new line as "Name (year)"
+
+```
+1. "Napoleon Dynamite (2004)"
+2. "Juno (2007)"
+3. "Little Miss Sunshine (2006)"
+4. "The Breakfast Club (1985)"
+5. "Ferris Bueller's Day Off (1986)"
+```
