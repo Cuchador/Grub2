@@ -44,6 +44,8 @@ The same can be done for the genre.
 
 ## Can you suggest 5 movies from the comedy genre that have the same vibe as turkey dinner? Send the response as a list with each item in its new line as "Name (year)"
 
+### Response
+
 ```
 1. "Planes, Trains, and Automobiles (1987)"
 2. "Home Alone (1990)"
@@ -55,6 +57,8 @@ The same can be done for the genre.
 If someone wants to adjust the length of the movie, they can do that too.
 
 ## Can you suggest 5 movies that are shorter than 2 hours that have the same vibe as a ham sandwich? Send the response as a list with each item in its new line as "Name (year)"
+
+### Response
 
 ```
 1. "Napoleon Dynamite (2004)"
@@ -68,6 +72,8 @@ You can also combine length and genres in the same query.
 
 ## Can you suggest 5 movies from the action genre that are shorter than 2 hours that have the same vibe as a taco? Send the response as a list with each item in its new line as "Name (year)"
 
+### Response
+
 ```
 1. "Die Hard (1988)"
 2. "Mad Max: Fury Road (2015)"
@@ -79,6 +85,8 @@ You can also combine length and genres in the same query.
 Finally, you can change the number of movies listed
 
 ## Can you suggest 10 movies that have the same vibe as sushi? Send the response as a list with each item in its new line as "Name (year)"
+
+### Response
 
 ```
 1. "Lost in Translation (2003)"
