@@ -1,0 +1,36 @@
+/* Header.css */
+
+.app-header {
+    background-image: url('./Grub2StubsLogo.png'); 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: #fff; /* Text color */
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .app-title {
+    margin-bottom: 10px;
+    font-size: 24px; 
+    position: relative;
+    z-index: 1; 
+  }
+  
+  .header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(127, 28, 28, 0.5); /* Light maroon tint with alpha (opacity) value */
+    z-index: 0; /* Place the overlay behind the text */
+  }
+  
+  .header-image {
+    width: 100%;
+    height: auto;
+    display: block; /* Remove extra space below image */
+    margin: 0 auto 20px; /* Center the image within the header and add a bottom margin */
+  }
+  

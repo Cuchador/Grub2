@@ -1,0 +1,39 @@
+/* CheckOptions.css */
+
+
+.check-options-container {
+    background-color: #ffffff; /* Burgundy / Dark Maroon background */
+    color: #000000; /* Contrast color of white */
+    padding: 20px;
+    width: 100%; /* Make the container span the whole screen horizontally */
+    margin: 0px auto; /* Center the container on the page */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .check-options-title {
+    margin-bottom: 10px;
+  }
+  
+  .options-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .option-item {
+    margin-bottom: 8px;
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox-input {
+    margin-right: 8px;
+  }
+  
+  .selected-options {
+    margin-top: 10px;
+  }
+  
