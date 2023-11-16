@@ -5,7 +5,8 @@ import './App.css';
 import FoodForm from './Components/FoodForm';
 
 function App() {
-  const genreList = ["Horror", "Fantasy", "Sci-fi", "Thriller", "Action", "Any genre"];
+  const genreList = ["Documentary", "Mystery", "Children", "Action", "Sci-Fi", "Comedy", "Thriller", "Western", "War", "Romance", "IMAX", "Horror", "Drama", "Film-Noir", 
+    "Crime", "Animation", "Musical", "Fantasy", "Adventure", "Any genre"];
   const lengthList = ["1 hour", "1-1.5 hours", "2 hours+", "Any length"];
   const yearsList = ["1960 - 1970", "1970 - 1980", "1980 - 1990", "1990 - 2000", "2000 - 2010", "2010 and onwards"];
 
@@ -53,21 +54,21 @@ function App() {
         <h1 className='check-options-title'>Preferences</h1>
         <CheckOptions
           className="checkoption-list"
-          title="Select the genre(s) you want"
+          title="Select the genre(s) you prefer"
           options={genreList}
           type="genre"
           onChange={handleCheckboxChange}
         />
         <CheckOptions
           className="checkoption-list"
-          title="Any specific release years you prefer?"
+          title="Select the release years you prefer"
           options={yearsList}
           type="years"
           onChange={handleCheckboxChange}
         />
         <CheckOptions
           className="checkoption-list"
-          title="How long do you want the movie to be?"
+          title="Select the movie length(s) you prefer"
           options={lengthList}
           type="length"
           onChange={handleCheckboxChange}

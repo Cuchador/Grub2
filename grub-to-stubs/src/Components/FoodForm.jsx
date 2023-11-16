@@ -35,7 +35,7 @@ const FoodForm = ({ onSubmit }) => {
 
   return (
     <div className="food-form">
-      <h2>Now, the most important part! Select the food you will be eating for your movie. (to enter multiple foods, select 'other' and enter them into the text box)</h2>
+      <h2>Now, the most important part! Select the food you will be eating for your movie. (to enter multiple foods, select 'other' and enter them into the text box separated by a comma)</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Select a food:
