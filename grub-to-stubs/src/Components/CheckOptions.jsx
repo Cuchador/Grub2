@@ -1,16 +1,9 @@
-// CheckOptions.jsx
-import React, { useState } from 'react';
-import './CheckOptions.css'; // Import CSS file for CheckOptions component
+import React from 'react';
+import './CheckOptions.css';
 
-const CheckOptions = ({ title, options }) => {
-  const [checkedOptions, setCheckedOptions] = useState([]);
-
+const CheckOptions = ({ title, options, type, onChange }) => {
   const handleCheckboxChange = (option) => {
-    if (checkedOptions.includes(option)) {
-      setCheckedOptions(checkedOptions.filter((item) => item !== option));
-    } else {
-      setCheckedOptions([...checkedOptions, option]);
-    }
+    onChange(type, option);
   };
 
   return (
@@ -23,7 +16,6 @@ const CheckOptions = ({ title, options }) => {
               <input
                 type="checkbox"
                 value={option}
-                checked={checkedOptions.includes(option)}
                 onChange={() => handleCheckboxChange(option)}
                 className="checkbox-input"
               />
@@ -32,7 +24,6 @@ const CheckOptions = ({ title, options }) => {
           </li>
         ))}
       </ul>
-      <p className="selected-options">Selected: {checkedOptions.join(', ')}</p>
     </div>
   );
 };

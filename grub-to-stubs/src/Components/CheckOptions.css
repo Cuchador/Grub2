@@ -2,13 +2,13 @@
 
 
 .check-options-container {
-    background-color: #ffffff; /* Burgundy / Dark Maroon background */
-    color: #000000; /* Contrast color of white */
+    background-color: #ffffff; 
+    color: #000000; 
     padding: 20px;
-    width: 100%; /* Make the container span the whole screen horizontally */
-    margin: 0px auto; /* Center the container on the page */
+    width: 100%; 
+    margin: 0px auto;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgb(63, 63, 63, 0.5);
   }
   
   .check-options-title {
