@@ -5,7 +5,7 @@ import logo from "./Grub2StubsLogo.png"
 
 const Header = () => {
   const scrollToBottom = () => {
-    const headerElement = document.querySelector('.check-options-container');
+    const headerElement = document.querySelector('.check-options-title');
     if (headerElement) {
       headerElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }

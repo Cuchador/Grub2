@@ -3,6 +3,8 @@ import CheckOptions from './Components/CheckOptions';
 import Header from './Components/Header';
 import './App.css';
 import FoodForm from './Components/FoodForm';
+import GPTResponse from './Components/GPTResponse';
+import OpenAI from 'openai';
 
 function App() {
   const genreList = ["Documentary", "Mystery", "Children", "Action", "Sci-Fi", "Comedy", "Thriller", "Western", "War", "Romance", "IMAX", "Horror", "Drama", "Film-Noir", 
@@ -13,7 +15,9 @@ function App() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedLengths, setSelectedLengths] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
-
+  const [gptmessage, setGPTMessage] = useState([]);
+  const [inputText, setInputText] = useState([]);
+  
   const handleCheckboxChange = (type, option) => {
     switch (type) {
       case 'genre':
@@ -40,12 +44,32 @@ function App() {
     });
   };
 
-  const handleFoodSubmit = (selectedFood) => {
+  const openai = new OpenAI({
+    apiKey: "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",//Key
+    dangerouslyAllowBrowser: true
+  });
+
+  const generateMovieReccomendations = async (selectedFood) => {
+    setInputText(`Can you suggest 5 movies from the genre(s) ${selectedGenres.join()} strictly between the years of ${selectedYears.join()} that are ${selectedLengths.join()} that have the same vibe as ${selectedFood}? Send the response as a list with each item in its new line as "Name (year)" and include nothing else in your response.`);
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{role: "assistant", content: inputText}],
+    });
+
+    setGPTMessage([
+      {
+        question: inputText,
+        answer: response.choices[0].message,
+      },
+      ...gptmessage,
+    ]);
+    
     console.log(`Selected genres: ${selectedGenres.join(', ')}`);
     console.log(`Selected lengths: ${selectedLengths.join(', ')}`);
     console.log(`Selected years: ${selectedYears.join(', ')}`);
-    // Here is where we shall make our API call and do our matrix factorization comparisons yay
+    setInputText("");
   };
+
 
   return (
     <div className="app-container">
@@ -75,7 +99,10 @@ function App() {
         />
       </div>
       <div className="food-form-container">
-        <FoodForm onSubmit={handleFoodSubmit} />
+        <FoodForm onSubmit={generateMovieReccomendations} />
+      </div>
+      <div className="response-container">
+      <GPTResponse gptmessage={gptmessage}/>
       </div>
     </div>
   );
