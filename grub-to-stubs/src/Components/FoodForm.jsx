@@ -1,12 +1,29 @@
 // FoodForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Papa from 'papaparse';
 
 const FoodForm = ({ onSubmit }) => {
   const [selectedFood, setSelectedFood] = useState('');
   const [customFood, setCustomFood] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
+  const [foodOptions, setFoodOptions] = useState([]);
 
-  const foodOptions = ["Pizza", "Burger", "Salad", "Pasta", "Other"];
+  useEffect(() => {
+    // Read data from the CSV file using Papa.parse
+    Papa.parse('mappings.csv', {
+      download: true,
+      header: true,
+      complete: (result) => {
+        console.log(result)
+        // Extract food options from CSV data
+        const options = result.data.map((row) => row.food);
+        // Add 'Other' to the options
+        options.push('Other');
+        // Set foodOptions state
+        setFoodOptions(options);
+      },
+    });
+  }, []);
 
   const handleFoodChange = (event) => {
     const selectedValue = event.target.value;
@@ -35,7 +52,7 @@ const FoodForm = ({ onSubmit }) => {
 
   return (
     <div className="food-form">
-      <h2>Now, the most important part! Select the food you will be eating for your movie. (to enter multiple foods, select 'other' and enter them into the text box separated by a comma)</h2>
+      <h2>Select the food you will be eating for your movie.</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Select a food:
@@ -57,9 +74,6 @@ const FoodForm = ({ onSubmit }) => {
 
         <button type="submit">Generate movies!</button>
       </form>
-
-      {/* Extra whitespace below the form */}
-      <div className="form-bottom-space"></div>
     </div>
   );
 };
