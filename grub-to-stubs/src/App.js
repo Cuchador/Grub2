@@ -69,7 +69,7 @@ function App() {
   //   console.log(`Selected years: ${selectedYears.join(', ')}`);
   //   setInputText("");
   // };
-  const generateMovieReccomendations = async (selectedFood) => {
+  const generateMovieRecomendations = async (selectedFood) => {
     try {
       const response = await fetch('http://127.0.0.1:5000/api/generate-movies', {
           method: 'POST',
@@ -99,7 +99,7 @@ function App() {
         {/* ... (previous code) */}
       </div>
       <div className="food-form-container">
-        <FoodForm onSubmit={generateMovieReccomendations} />
+        <FoodForm onSubmit={generateMovieRecomendations} />
       </div>
       {/* Display recommendations below the form */}
       {gptmessage.length > 0 && (
