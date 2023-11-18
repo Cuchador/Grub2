@@ -44,10 +44,10 @@ function App() {
     });
   };
 
-  const openai = new OpenAI({
-    apiKey: "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",//Key
-    dangerouslyAllowBrowser: true
-  });
+  // const openai = new OpenAI({
+  //   apiKey: "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",//Key
+  //   dangerouslyAllowBrowser: true
+  // });
 
   // const generateMovieReccomendations = async (selectedFood) => {
   //   setInputText(`Can you suggest 5 movies from the genre(s) ${selectedGenres.join()} strictly between the years of ${selectedYears.join()} that are ${selectedLengths.join()} that have the same vibe as ${selectedFood}? Send the response as a list with each item in its new line as "Name (year)" and include nothing else in your response.`);
@@ -92,32 +92,42 @@ function App() {
   };
   
 
-   return (
+
+  return (
     <div className="app-container">
       <Header />
       <div className="check-options-container">
-        {/* ... (previous code) */}
+        <h1 className='check-options-title'>Preferences</h1>
+        <CheckOptions
+          className="checkoption-list"
+          title="Select the genre(s) you prefer"
+          options={genreList}
+          type="genre"
+          onChange={handleCheckboxChange}
+        />
+        <CheckOptions
+          className="checkoption-list"
+          title="Select the release years you prefer"
+          options={yearsList}
+          type="years"
+          onChange={handleCheckboxChange}
+        />
+        <CheckOptions
+          className="checkoption-list"
+          title="Select the movie length(s) you prefer"
+          options={lengthList}
+          type="length"
+          onChange={handleCheckboxChange}
+        />
       </div>
       <div className="food-form-container">
         <FoodForm onSubmit={generateMovieRecomendations} />
       </div>
-      {/* Display recommendations below the form */}
-      {gptmessage.length > 0 && (
-        <div className="recommendations-container">
-          <h2>Movie Recommendations:</h2>
-          <ul>
-            {gptmessage.map((message, index) => (
-              <li key={index}>
-                <strong>Question:</strong> {message.question}<br />
-                <strong>Answer:</strong> {message.answer}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className="response-container">
+      <GPTResponse gptmessage={gptmessage}/>
+      </div>
     </div>
   );
-};
-
+}
 
 export default App;
