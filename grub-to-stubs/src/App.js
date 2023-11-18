@@ -10,7 +10,7 @@ function App() {
   const genreList = ["Documentary", "Mystery", "Children", "Action", "Sci-Fi", "Comedy", "Thriller", "Western", "War", "Romance", "IMAX", "Horror", "Drama", "Film-Noir", 
     "Crime", "Animation", "Musical", "Fantasy", "Adventure", "Any genre"];
   const lengthList = ["1 hour", "1-1.5 hours", "2 hours+", "Any length"];
-  const yearsList = ["1960 - 1970", "1970 - 1980", "1980 - 1990", "1990 - 2000", "2000 - 2010", "2010 and onwards"];
+  const yearsList = ["1950s", "1960s", "1970s", "1980s","1990s","2000s","2010s"];
 
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedLengths, setSelectedLengths] = useState([]);
@@ -70,13 +70,19 @@ function App() {
   //   setInputText("");
   // };
   const generateMovieRecomendations = async (selectedFood) => {
+    console.log(selectedGenres)
     try {
       const response = await fetch('http://127.0.0.1:5000/api/generate-movies', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
           },
-            body: JSON.stringify({ selectedFood }),
+          body: JSON.stringify({
+            selectedFood,
+            selectedGenres,
+            selectedYears,
+   
+          }),
       });
 
       if (!response.ok) {
@@ -107,7 +113,7 @@ function App() {
         />
         <CheckOptions
           className="checkoption-list"
-          title="Select the release years you prefer"
+          title="Select the decade(s) you prefer"
           options={yearsList}
           type="years"
           onChange={handleCheckboxChange}

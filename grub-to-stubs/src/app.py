@@ -25,6 +25,12 @@ def generate_movies():
     #gets selected food item
     selected_food = data['selectedFood']
 
+    selected_genres = data['selectedGenres']
+    selected_years = data['selectedYears']
+
+    #gets decades as integers
+    selected_years = [int(year.replace('s', '')) for year in selected_years]
+
     #gets mappings to movie
     mappings = pd.read_csv('../public/mappings.csv')
 
@@ -44,10 +50,16 @@ def generate_movies():
     movie_index = movies.loc[movies['title'] == movie].index[0]
     movie_vec = np.array(lf_matrix[movie_index])
 
+    #gets subset of movies captured by filters
+    genres_filter = (len(selected_genres) == 0) | (movies['genres'].apply(lambda x: any(genre in x for genre in selected_genres)))
+    decades_filter = (len(selected_years) == 0) | (movies['year'].apply(lambda x: any(x >= decade and x < decade + 10 for decade in selected_years)))
+
+    filtered_movies = movies[genres_filter & decades_filter]
+
     #gets cosine similarity for each movie
     sim_list = []
     movie_list = []
-    for id in movies.index:
+    for id in filtered_movies.index:
         movie_vec2 = lf_matrix[id]
         sim = cosine_sim(movie_vec, movie_vec2)
         sim_list.append(sim)
@@ -58,10 +70,9 @@ def generate_movies():
     sorted_combined_lists = sorted(combined_lists, key=lambda x: x[0], reverse = True)
     sim_list, movie_list = zip(*sorted_combined_lists)
 
-    print("The 3 highest ranked for the query are: ")
+    #gets top 3 recommendations
     movie_names = []
     for i in range(3):
-        print(sim_list[i], '|', movies.loc[movie_list[i]]['title'])
         movie_names.append(movies.loc[movie_list[i]]['title'])
 
     #generates the response
