@@ -5,11 +5,35 @@ from numpy.linalg import norm
 import numpy as np
 import ast  
 
+import openai
+import time
+
+
 def cosine_sim(vec1, vec2):
     sim = 0
     if norm(vec1) != 0 and norm(vec2) != 0:
         sim = np.dot(vec1, vec2) / (norm(vec1) * norm(vec2))
     return sim
+
+def openAiMovieRequest(food):
+    message = 'I am going to provide you with a food item,' 
+    message += 'and you are going to provide me with one movie that would pair well with this movie and has a similar vibe.'
+    message += 'Be sure to include the full official name of the movie followed by the year (ex: Star Wars: Episode IV – A New Hope (1977)).'
+    message += 'Only give me the name of this movie and no other information.'
+    message += 'Food: ' + food
+    openai.api_key= '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'
+    try:
+        chat_completion = openai.ChatCompletion.create(model = 'gpt-3.5-turbo',messages=[{'role': 'user', 'content': message}])
+        content = chat_completion['choices'][0]['message']['content']
+
+        return content
+    except openai.error.ServiceUnavailableError as e:
+        print(f"ServiceUnavailableError: {e}")
+        print("Retrying after a delay...")
+        time.sleep(5)  # Wait for 5 seconds before retrying
+        return openAiMovieRequest(food)
+
+
 
 
 
@@ -20,10 +44,16 @@ CORS(app)
 @app.route('/api/generate-movies', methods=['POST'])
 def generate_movies():
 
+   
+
     data = request.get_json()
     
     #gets selected food item
     selected_food = data['selectedFood']
+
+    
+    movie = openAiMovieRequest(selected_food)
+    
 
     selected_genres = data['selectedGenres']
     selected_years = data['selectedYears']
@@ -38,12 +68,22 @@ def generate_movies():
     row = mappings[mappings['food'] == selected_food]
     movie = row['movie'].iloc[0]
 
+   
+
     #creates dataframe for movie data
     movies = pd.read_csv('../public/movies.csv')
     movies.set_index('movieId', inplace=True)
     movies['genres'] = movies['genres'].apply(ast.literal_eval)
 
+
+    movie = ''
+    #gets movie that is in the dataset
+    while not (movie in movies['title'].values):
+        #bypasses mappings and goes straight to chat gpt
+        movie = openAiMovieRequest(selected_food)
+    print(movie)
     #creates data frame for latent factors
+    
     lf_matrix = pd.read_csv('../public/movie_latent_factors.csv', header=None).values.tolist()
 
     #gets latent vector for inial movie
