@@ -4,30 +4,30 @@ import Header from './Components/Header';
 import './App.css';
 import FoodForm from './Components/FoodForm';
 import GPTResponse from './Components/GPTResponse';
-import OpenAI from 'openai';
+import Loading from './Components/Loading';
 
 function App() {
   const genreList = ["Documentary", "Mystery", "Children", "Action", "Sci-Fi", "Comedy", "Thriller", "Western", "War", "Romance", "IMAX", "Horror", "Drama", "Film-Noir", 
     "Crime", "Animation", "Musical", "Fantasy", "Adventure", "Any genre"];
-  const lengthList = ["1 hour", "1-1.5 hours", "2 hours+", "Any length"];
   const yearsList = ["1950s", "1960s", "1970s", "1980s","1990s","2000s","2010s"];
+  const popularityList = ["1", "2", "3", "4", "5"]
 
   const [selectedGenres, setSelectedGenres] = useState([]);
-  const [selectedLengths, setSelectedLengths] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
+  const [selectedPopularities, setSelectedPopularities] = useState([]);
   const [gptmessage, setGPTMessage] = useState([]);
-  const [inputText, setInputText] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   
   const handleCheckboxChange = (type, option) => {
     switch (type) {
       case 'genre':
         updateSelectedOptions(selectedGenres, setSelectedGenres, option);
         break;
-      case 'length':
-        updateSelectedOptions(selectedLengths, setSelectedLengths, option);
-        break;
       case 'years':
         updateSelectedOptions(selectedYears, setSelectedYears, option);
+        break;
+      case 'popularity':
+        updateSelectedOptions(selectedPopularities, setSelectedPopularities, option);
         break;
       default:
         break;
@@ -44,55 +44,43 @@ function App() {
     });
   };
 
-  // const openai = new OpenAI({
-  //   apiKey: "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",//Key
-  //   dangerouslyAllowBrowser: true
-  // });
+  const scrollToBottom = () => {
+    const headerElement = document.querySelector('.response-container');
+    if (headerElement) {
+      headerElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  };
 
-  // const generateMovieReccomendations = async (selectedFood) => {
-  //   setInputText(`Can you suggest 5 movies from the genre(s) ${selectedGenres.join()} strictly between the years of ${selectedYears.join()} that are ${selectedLengths.join()} that have the same vibe as ${selectedFood}? Send the response as a list with each item in its new line as "Name (year)" and include nothing else in your response.`);
-  //   const response = await openai.chat.completions.create({
-  //     model: "gpt-3.5-turbo",
-  //     messages: [{role: "assistant", content: inputText}],
-  //   });
-
-  //   setGPTMessage([
-  //     {
-  //       question: inputText,
-  //       answer: response.choices[0].message,
-  //     },
-  //     ...gptmessage,
-  //   ]);
-    
-  //   console.log(`Selected genres: ${selectedGenres.join(', ')}`);
-  //   console.log(`Selected lengths: ${selectedLengths.join(', ')}`);
-  //   console.log(`Selected years: ${selectedYears.join(', ')}`);
-  //   setInputText("");
-  // };
   const generateMovieRecomendations = async (selectedFood) => {
     try {
+      setIsLoading(true); // Set loading to true when the API call starts
+
       const response = await fetch('http://127.0.0.1:5000/api/generate-movies', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            selectedFood,
-            selectedGenres,
-            selectedYears,
-   
-          }),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          selectedFood,
+          selectedGenres,
+          selectedYears,
+          selectedPopularities,
+        }),
       });
 
       if (!response.ok) {
-          throw new Error('Network response was not ok');
+        throw new Error('Network response was not ok');
       }
 
       const data = await response.json();
       console.log('Movie recommendations:', data.recommendations);
+      setGPTMessage(data.recommendations);
 
     } catch (error) {
       console.error('Fetch error:', error);
+    } finally {
+      setIsLoading(false); // Set loading back to false when the API call completes
+      scrollToBottom();
     }
   };
   
@@ -119,9 +107,9 @@ function App() {
         />
         <CheckOptions
           className="checkoption-list"
-          title="Select the movie length(s) you prefer"
-          options={lengthList}
-          type="length"
+          title="Select the popularity level of the movie (1 for least popular, 5 for most popular)"
+          options={popularityList}
+          type="popularity"
           onChange={handleCheckboxChange}
         />
       </div>
@@ -129,7 +117,7 @@ function App() {
         <FoodForm onSubmit={generateMovieRecomendations} />
       </div>
       <div className="response-container">
-      <GPTResponse gptmessage={gptmessage}/>
+      {isLoading ? <Loading /> : <GPTResponse gptmessage={gptmessage} />}
       </div>
     </div>
   );

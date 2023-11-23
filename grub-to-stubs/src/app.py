@@ -15,23 +15,29 @@ def cosine_sim(vec1, vec2):
         sim = np.dot(vec1, vec2) / (norm(vec1) * norm(vec2))
     return sim
 
-def openAiMovieRequest(food):
-    message = 'I am going to provide you with a food item,' 
-    message += 'and you are going to provide me with one movie that would pair well with this movie and has a similar vibe.'
-    message += 'Be sure to include the full official name of the movie followed by the year (ex: Star Wars: Episode IV – A New Hope (1977)).'
-    message += 'Only give me the name of this movie and no other information.'
-    message += 'Food: ' + food
+def openAiMovieRequest(food, genres, decades, popularities):
+    template = "{}"
+    message = 'Suggest a movie that has the same vibe as ' + food
+    if (genres):
+        message += ' belonging to the genre(s) ' + ', '.join(str(genre) for genre in genres)
+    if (decades):
+        message += ' released in the decade(s) ' + ', '.join(str(decade) for decade in decades)
+    if (popularities):
+        message += ' with popularity level(s) ' + ', '.join(str(pop) for pop in popularities)
+        message += " where 1 is NOT a popular movie, and 5 is the most popular movie in that genre"
+    
+    message += '. Send the response in the format: "Name (year)" where Name is the name of the movie and year is the year that movie was released'
+    message += ' and include absolutely nothing else in your response.'
     openai.api_key= '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'
     try:
         chat_completion = openai.ChatCompletion.create(model = 'gpt-3.5-turbo',messages=[{'role': 'user', 'content': message}])
         content = chat_completion['choices'][0]['message']['content']
-
         return content
     except openai.error.ServiceUnavailableError as e:
         print(f"ServiceUnavailableError: {e}")
         print("Retrying after a delay...")
         time.sleep(5)  # Wait for 5 seconds before retrying
-        return openAiMovieRequest(food)
+        return openAiMovieRequest(food, genres, decades)
 
 
 
@@ -50,19 +56,20 @@ def generate_movies():
     
     #gets selected food item
     selected_food = data['selectedFood']
-
-    
-    movie = openAiMovieRequest(selected_food)
-    
-
     selected_genres = data['selectedGenres']
     selected_years = data['selectedYears']
+    selected_popularities = data['selectedPopularities']
 
     #gets decades as integers
     selected_years = [int(year.replace('s', '')) for year in selected_years]
+    
+    movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities)
+    
+
+    
 
     #gets mappings to movie
-    mappings = pd.read_csv('../public/mappings.csv')
+    mappings = pd.read_csv('public/mappings.csv')
 
     #gets initial movie from mapping
     row = mappings[mappings['food'] == selected_food]
@@ -71,7 +78,7 @@ def generate_movies():
    
 
     #creates dataframe for movie data
-    movies = pd.read_csv('../public/movies.csv')
+    movies = pd.read_csv('public/movies.csv')
     movies.set_index('movieId', inplace=True)
     movies['genres'] = movies['genres'].apply(ast.literal_eval)
 
@@ -80,11 +87,11 @@ def generate_movies():
     #gets movie that is in the dataset
     while not (movie in movies['title'].values):
         #bypasses mappings and goes straight to chat gpt
-        movie = openAiMovieRequest(selected_food)
+        movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities)
     print(movie)
     #creates data frame for latent factors
     
-    lf_matrix = pd.read_csv('../public/movie_latent_factors.csv', header=None).values.tolist()
+    lf_matrix = pd.read_csv('public/movie_latent_factors.csv', header=None).values.tolist()
 
     #gets latent vector for inial movie
     movie_index = movies.loc[movies['title'] == movie].index[0]
