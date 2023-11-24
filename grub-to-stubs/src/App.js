@@ -17,6 +17,7 @@ function App() {
   const [selectedPopularities, setSelectedPopularities] = useState([]);
   const [gptmessage, setGPTMessage] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState([]);
   
   const handleCheckboxChange = (type, option) => {
     switch (type) {
@@ -32,6 +33,7 @@ function App() {
       default:
         break;
     }
+    
   };
 
   const updateSelectedOptions = (prevOptions, setOptions, option) => {
@@ -73,7 +75,7 @@ function App() {
       }
 
       const data = await response.json();
-      console.log('Movie recommendations:', data.recommendations);
+      console.log('Movie recommendations:', typeof(data.recommendations));
       setGPTMessage(data.recommendations);
 
     } catch (error) {
@@ -81,6 +83,9 @@ function App() {
     } finally {
       setIsLoading(false); // Set loading back to false when the API call completes
       scrollToBottom();
+      setResponseMessage(`Here are some movies in the [${selectedGenres}] genre(s)
+      that were released in the decade(s) of: [${selectedYears}] with a popularity level
+      of [${selectedPopularities}].`);
     }
   };
   
@@ -89,25 +94,25 @@ function App() {
   return (
     <div className="app-container">
       <Header />
-      <div className="check-options-container">
-        <h1 className='check-options-title'>Preferences</h1>
+      <div className="options-list-container">
+        <h1 className='preferences-title'>Filter by...</h1>
         <CheckOptions
           className="checkoption-list"
-          title="Select the genre(s) you prefer"
+          title="Genre"
           options={genreList}
           type="genre"
           onChange={handleCheckboxChange}
         />
         <CheckOptions
           className="checkoption-list"
-          title="Select the decade(s) you prefer"
+          title="Decade"
           options={yearsList}
           type="years"
           onChange={handleCheckboxChange}
         />
         <CheckOptions
           className="checkoption-list"
-          title="Select the popularity level of the movie (1 for least popular, 5 for most popular)"
+          title="Popularity (1 for least popular, 5 for most popular)"
           options={popularityList}
           type="popularity"
           onChange={handleCheckboxChange}
@@ -117,7 +122,7 @@ function App() {
         <FoodForm onSubmit={generateMovieRecomendations} />
       </div>
       <div className="response-container">
-      {isLoading ? <Loading /> : <GPTResponse gptmessage={gptmessage} />}
+      {isLoading ? <Loading /> : <GPTResponse gptmessage={gptmessage} responseMessage={responseMessage}/>}
       </div>
     </div>
   );

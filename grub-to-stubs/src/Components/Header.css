@@ -1,7 +1,6 @@
 /* Header.css */
 
 .app-header {
-  background-image: url('./Grub2StubsLogo.png');
   background-size: cover;
   background-position: center;
   position: relative;
@@ -9,6 +8,7 @@
   /* Text color */
   padding: 20px;
   text-align: center;
+  background-color: #500000;
 }
 
 .app-title {
@@ -21,7 +21,7 @@
 
 
 .header-image {
-  width: 60%;
+  width: 100%;
   height: auto;
   display: block;
   /* Remove extra space below image */
@@ -36,7 +36,7 @@
 
 .introduction1,
 .introduction2 {
-  max-width: 50%;
+  max-width: 100%;
   margin: 0 auto;
   /* Center the text */
 }

@@ -1,0 +1,30 @@
+.answerDiv {
+    display: flex;
+    justify-content: center;
+    height: 300px;
+    background-color: #500000;
+  }
+  
+  .answerSubDiv {
+    width: 80%;
+  }
+  
+  .answerContainer {
+    font-size: 24px;
+    color: white;
+    text-align: left; /* Align text to the left */
+    white-space: pre-line;
+    font-variant-numeric: tabular-nums; /* Use tabular numerals for vertical alignment */
+  }
+  
+  /* Other styles remain unchanged */
+  
+
+  .responseContainer {
+    font-size: 30px;
+    color: white; 
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  
+  

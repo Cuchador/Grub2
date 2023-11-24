@@ -16,7 +16,6 @@ def cosine_sim(vec1, vec2):
     return sim
 
 def openAiMovieRequest(food, genres, decades, popularities):
-    template = "{}"
     message = 'Suggest a movie that has the same vibe as ' + food
     if (genres):
         message += ' belonging to the genre(s) ' + ', '.join(str(genre) for genre in genres)
@@ -30,7 +29,14 @@ def openAiMovieRequest(food, genres, decades, popularities):
     message += ' and include absolutely nothing else in your response.'
     openai.api_key= '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'
     try:
-        chat_completion = openai.ChatCompletion.create(model = 'gpt-3.5-turbo',messages=[{'role': 'user', 'content': message}])
+        SYSTEM_PROMPT = f"""You are a movie reccomendation AI assistant.
+        You will be given a food and (optionally) sets of one or more genres, decades,
+        and popularity levels, where 5 is very popular, and 1 is not popular at all.
+       """
+        chat_completion = openai.ChatCompletion.create(model = 'gpt-3.5-turbo',messages=[
+            {'role': 'system', 'content': SYSTEM_PROMPT},
+            {'role': 'user', 'content': message}]
+                                                       )
         content = chat_completion['choices'][0]['message']['content']
         return content
     except openai.error.ServiceUnavailableError as e:
@@ -88,7 +94,7 @@ def generate_movies():
     while not (movie in movies['title'].values):
         #bypasses mappings and goes straight to chat gpt
         movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities)
-    print(movie)
+    #print(movie)
     #creates data frame for latent factors
     
     lf_matrix = pd.read_csv('public/movie_latent_factors.csv', header=None).values.tolist()

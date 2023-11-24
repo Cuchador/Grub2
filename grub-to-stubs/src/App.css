@@ -6,50 +6,54 @@
 
 .app-container {
   position: relative;
+  
 }
 
-.check-options-container {
+.options-list-container {
   position: relative;
-  margin-bottom: 30px; /* Adjust as needed for the desired separation */
+  margin-bottom: 30px; 
+  background-color: #e5e4e2;
 }
 
 .food-form-container {
-  margin-top: 30px; /* Adjust margin as needed to separate from CheckOptions */
+  margin-top: 30px; 
+  
 }
 
-/* You can also increase the size of the FoodForm here */
+
 .food-form-container select,
 .food-form-container input,
 .food-form-container button {
-  font-size: 18px; /* Adjust font size as needed */
-  /* Add other styling properties as needed */
+  font-size: 18px; 
 }
 
-/* App.css */
-
-/* ... existing styles ... */
 
 .food-form {
-  margin-top: 30px; /* Adjust margin as needed */
-  text-align: center; /* Center the form content */
+  margin-top: 30px; 
+  text-align: center; 
 }
 
 .food-form h2 {
-  font-size: 25px; /* Adjust font size as needed for the header text */
+  font-size: 25px;
 }
 
 .form-bottom-space {
-  margin-bottom: 200px; /* Adjust margin as needed for extra whitespace below the form */
+  margin-bottom: 10px; 
 }
 
 .food-form select,
 .food-form input,
 .food-form button {
-  font-size: 18px; /* Adjust font size as needed */
-  /* Add other styling properties as needed */
+  font-size: 18px; 
 }
 
 
 .response-container {
+  margin-top: 20px;
   text-align: center;
+}
+
+.preferences-title {
+  margin-left: 40px;
+  font-size: 40px;
 }
