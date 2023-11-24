@@ -69,16 +69,16 @@ def generate_movies():
     
 
     #gets mappings to movie
-    mappings = pd.read_csv('public/mappings.csv')
+    #mappings = pd.read_csv('public/mappings.csv')
 
     #gets initial movie from mapping
-    row = mappings[mappings['food'] == selected_food]
-    movie = row['movie'].iloc[0]
+    # row = mappings[mappings['food'] == selected_food]
+    # movie = row['movie'].iloc[0]
 
    
 
     #creates dataframe for movie data
-    movies = pd.read_csv('public/movies.csv')
+    movies = pd.read_csv('../public/movies.csv')
     movies.set_index('movieId', inplace=True)
     movies['genres'] = movies['genres'].apply(ast.literal_eval)
 
@@ -91,7 +91,7 @@ def generate_movies():
     print(movie)
     #creates data frame for latent factors
     
-    lf_matrix = pd.read_csv('public/movie_latent_factors.csv', header=None).values.tolist()
+    lf_matrix = pd.read_csv('../public/movie_latent_factors.csv', header=None).values.tolist()
 
     #gets latent vector for inial movie
     movie_index = movies.loc[movies['title'] == movie].index[0]
