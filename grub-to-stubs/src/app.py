@@ -16,15 +16,14 @@ def cosine_sim(vec1, vec2):
     return sim
 
 def openAiMovieRequest(food, genres, decades, popularities):
-    template = "{}"
     message = 'Suggest a movie that has the same vibe as ' + food
-    if (genres):
-        message += ' belonging to the genre(s) ' + ', '.join(str(genre) for genre in genres)
-    if (decades):
-        message += ' released in the decade(s) ' + ', '.join(str(decade) for decade in decades)
-    if (popularities):
-        message += ' with popularity level(s) ' + ', '.join(str(pop) for pop in popularities)
-        message += " where 1 is NOT a popular movie, and 5 is the most popular movie in that genre"
+    # if (genres):
+    #     message += ' belonging to the genre(s) ' + ', '.join(str(genre) for genre in genres)
+    # if (decades):
+    #     message += ' released in the decade(s) ' + ', '.join(str(decade) for decade in decades)
+    # if (popularities):
+    #     message += ' with popularity level(s) ' + ', '.join(str(pop) for pop in popularities)
+    #     message += " where 1 is NOT a popular movie, and 5 is the most popular movie in that genre"
     
     message += '. Send the response in the format: "Name (year)" where Name is the name of the movie and year is the year that movie was released'
     message += ' and include absolutely nothing else in your response.'
@@ -40,6 +39,25 @@ def openAiMovieRequest(food, genres, decades, popularities):
         return openAiMovieRequest(food, genres, decades)
 
 
+#gets range of frequencies to include in filtering
+def getPopularityThresholds(popularities):
+    freq_thresholds = pd.read_csv('public/FreqThresholds.csv')
+    freq_thresholds.set_index('Popularity', inplace=True)
+    thresholds = []
+    for pop in popularities:
+        pop = int(pop)
+        lower_bound = freq_thresholds.loc[pop]['Frequency']
+        if pop == 5:
+            upper_bound = 99999
+        else:
+            upper_bound = freq_thresholds.loc[pop + 1]['Frequency']
+    
+        threshold = (lower_bound, upper_bound)
+        thresholds.append(threshold)
+
+    return thresholds
+
+    
 
 
 
@@ -66,8 +84,6 @@ def generate_movies():
     movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities)
     
 
-    
-
     #gets mappings to movie
     #mappings = pd.read_csv('public/mappings.csv')
 
@@ -78,7 +94,7 @@ def generate_movies():
    
 
     #creates dataframe for movie data
-    movies = pd.read_csv('../public/movies.csv')
+    movies = pd.read_csv('public/movies.csv')
     movies.set_index('movieId', inplace=True)
     movies['genres'] = movies['genres'].apply(ast.literal_eval)
 
@@ -91,17 +107,22 @@ def generate_movies():
     print(movie)
     #creates data frame for latent factors
     
-    lf_matrix = pd.read_csv('../public/movie_latent_factors.csv', header=None).values.tolist()
+    lf_matrix = pd.read_csv('public/movie_latent_factors.csv', header=None).values.tolist()
 
     #gets latent vector for inial movie
     movie_index = movies.loc[movies['title'] == movie].index[0]
     movie_vec = np.array(lf_matrix[movie_index])
 
     #gets subset of movies captured by filters
+
+    thresholds = getPopularityThresholds(selected_popularities)
+
     genres_filter = (len(selected_genres) == 0) | (movies['genres'].apply(lambda x: any(genre in x for genre in selected_genres)))
     decades_filter = (len(selected_years) == 0) | (movies['year'].apply(lambda x: any(x >= decade and x < decade + 10 for decade in selected_years)))
+    popularity_filter = (len(thresholds) == 0) | movies['freq'].apply(lambda x: any(lower <= x < upper for lower, upper in thresholds))
 
-    filtered_movies = movies[genres_filter & decades_filter]
+
+    filtered_movies = movies[genres_filter & decades_filter & popularity_filter]
 
     #gets cosine similarity for each movie
     sim_list = []
