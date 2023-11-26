@@ -86,7 +86,7 @@ def generate_movies():
     selected_popularities = data['selectedPopularities']
 
     #gets decades as integers
-    selected_years = [int(year.replace('s', '')) for year in selected_years]
+    selected_years = [int(year) for year in selected_years]
     
     movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities)
     
