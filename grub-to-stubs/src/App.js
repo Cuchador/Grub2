@@ -18,6 +18,7 @@ function App() {
   const [gptmessage, setGPTMessage] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState([]);
+  const [onlyGPT, setOnlyGPT] = useState(false);
 
   const handleCheckboxChange = (type, option) => {
     switch (type) {
@@ -44,6 +45,11 @@ function App() {
         return [...prevOptions, option];
       }
     });
+  };
+
+  const handleYesCheckboxChange = () => {
+    setOnlyGPT((prevOnlyGPT) => !prevOnlyGPT);
+    console.log(onlyGPT);
   };
 
   const scrollToBottom = () => {
@@ -74,6 +80,7 @@ function App() {
           selectedGenres,
           selectedYears,
           selectedPopularities,
+          onlyGPT,
         }),
       });
 
@@ -127,6 +134,13 @@ function App() {
           options={popularityList}
           type="popularity"
           onChange={handleCheckboxChange}
+        />
+        <CheckOptions
+          className="checkoption-list"
+          title="Our recommendations come from a mix of ChatGPT and our own model. Would you like them to come purely from ChatGPT (experimental)?"
+          options={["Yes"]}
+          type="onlyGPT"
+          onChange={handleYesCheckboxChange}
         />
       </div>
       <div className="food-form-container">
