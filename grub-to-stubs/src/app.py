@@ -16,7 +16,7 @@ def cosine_sim(vec1, vec2):
     return sim
 
 def openAiMovieRequest(food, genres, decades, popularities, only_gpt, movie_names=[]):
-    message = 'Suggest a movie that has the same vibe as ' + food
+    message = 'Suggest a movie that would be enjoyed well while eating ' + food
     if (only_gpt):
         if (genres):
             message += ' belonging to the genre(s) ' + ', '.join(str(genre) for genre in genres)
