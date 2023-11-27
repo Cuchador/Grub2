@@ -8,7 +8,7 @@ import Loading from './Components/Loading';
 
 function App() {
   const genreList = ["Documentary", "Mystery", "Children", "Action", "Sci-Fi", "Comedy", "Thriller", "Western", "War", "Romance", "IMAX", "Horror", "Drama", "Film-Noir",
-    "Crime", "Animation", "Musical", "Fantasy", "Adventure", "Any genre"];
+    "Crime", "Animation", "Musical", "Fantasy", "Adventure"];
   const yearsList = ["1950", "1960", "1970", "1980", "1990", "2000", "2010"];
   const popularityList = ["1", "2", "3", "4", "5"]
 

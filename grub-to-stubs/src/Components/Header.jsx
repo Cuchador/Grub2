@@ -20,7 +20,7 @@ const Header = () => {
       </p>
       <p className='introduction2'>
         Here's where we come in to help! Given a set of your preferences on food choice, we will recommend you a set of movies. Additionally, we can recommend you a movie given
-        preferences like genre, release year, and more. When you're ready to get started, scroll down or click the button below. Enjoy!
+        preferences like genre, release year, and more. You can also choose to not select any preferences at all. When you're ready to get started, scroll down or click the button below. Enjoy!
       </p>
       <button className="scroll-to-bottom-button" onClick={scrollToBottom}>
         Get Started
