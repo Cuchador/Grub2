@@ -41,9 +41,10 @@ function App() {
         setOnlyGPT(false);
         document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
         const gptFilters = document.getElementById('GPTFilters');
-        gptFilters.value = '';
-        
-        
+       	if (gptFilters)
+		{
+			gptFilters.value = '';
+		}
         break;
     }
   };
