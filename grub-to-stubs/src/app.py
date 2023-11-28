@@ -36,6 +36,7 @@ def openAiMovieRequest(food, genres, decades, popularities, only_gpt, gpt_filter
     message += '. Send the response in the format: "Name (year)" where Name is the name of the movie and year is the year that movie was released'
     message += ' and include absolutely nothing else in your response.'
     openai.api_key= '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'
+    print(message)
     try:
         SYSTEM_PROMPT = f"""You are a movie reccomendation AI assistant.
         You will be given a food and (optionally) sets of one or more genres, decades,

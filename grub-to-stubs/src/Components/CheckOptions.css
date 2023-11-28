@@ -39,15 +39,17 @@
     margin-top: 10px;
   }
 
-  label[for="GPTFilters"] {
-    display: block;
-    margin-bottom: 5px;
+  #GPTFilters {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 8px; /* Adjust margin as needed */
   }
   
-  input[type="text"] {
-    width: 100%;
-    padding: 10px; 
-    box-sizing: border-box;
-    border: 1px solid #ccc; 
-    border-radius: 1px; 
+  /* You can also style the label for better alignment or appearance */
+  .text-box-container label {
+    display: block; /* Make the label a block element for proper spacing */
+    margin-bottom: 6px; /* Adjust margin as needed */
   }
