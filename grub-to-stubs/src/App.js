@@ -83,7 +83,12 @@ function App() {
       setIsLoading(true);
 
       const gptFilters = document.getElementById('GPTFilters');
-      const gptFiltersValue = gptFilters.value;
+	  var gptFiltersVal = null;
+	  if (gptFilters)
+	  {
+	  	gptFiltersVal = gptFilters.value;
+	  }
+	  const gptFiltersValue = gptFiltersVal;
 
       const response = await fetch('http://127.0.0.1:5000/api/generate-movies', {
         method: 'POST',
