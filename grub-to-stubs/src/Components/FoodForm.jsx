@@ -57,9 +57,9 @@ const FoodForm = ({ onSubmit }) => {
         <label>
           Select a food:
           <select value={selectedFood} onChange={handleFoodChange}>
-            {foodOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
+            {foodOptions.map((option, index) => (
+              <option key={index} value={option}>
+                {index === 0 ? 'Select a food' : option}
               </option>
             ))}
           </select>
