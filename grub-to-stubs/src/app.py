@@ -15,7 +15,8 @@ def cosine_sim(vec1, vec2):
         sim = np.dot(vec1, vec2) / (norm(vec1) * norm(vec2))
     return sim
 
-def openAiMovieRequest(food, genres, decades, popularities, only_gpt, movie_names=[]):
+def openAiMovieRequest(food, genres, decades, popularities, only_gpt, gpt_filters, movie_names=[]):
+
     message = 'Suggest a movie that would be enjoyed well while eating ' + food
     if (only_gpt):
         if (genres):
@@ -25,12 +26,17 @@ def openAiMovieRequest(food, genres, decades, popularities, only_gpt, movie_name
         if (popularities):
             message += ' with popularity level(s) ' + ', '.join(str(pop) for pop in popularities)
             message += " where 1 is NOT a popular movie, and 5 is the most popular movie in that genre"
+        if(gpt_filters):
+            message += ". With additional filters: " + gpt_filters
         if (movie_names):
             message += " different from the movie(s) " + ', '.join(str(movie_names) for name in movie_names)
+
+        
     
     message += '. Send the response in the format: "Name (year)" where Name is the name of the movie and year is the year that movie was released'
     message += ' and include absolutely nothing else in your response.'
     openai.api_key= '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'
+    print(message)
     try:
         SYSTEM_PROMPT = f"""You are a movie reccomendation AI assistant.
         You will be given a food and (optionally) sets of one or more genres, decades,
@@ -46,7 +52,7 @@ def openAiMovieRequest(food, genres, decades, popularities, only_gpt, movie_name
         print(f"ServiceUnavailableError: {e}")
         print("Retrying after a delay...")
         time.sleep(5)  # Wait for 5 seconds before retrying
-        return openAiMovieRequest(food, genres, decades, popularities, only_gpt)
+        return openAiMovieRequest(food, genres, decades, popularities, only_gpt, gpt_filters)
 
 
 #gets range of frequencies to include in filtering
@@ -88,13 +94,14 @@ def generate_movies():
     selected_years = data['selectedYears']
     selected_popularities = data['selectedPopularities']
     only_gpt = data['onlyGPT']
-    print(only_gpt)
+    gpt_filters = data['gptFilters']
+   
     
 
     #gets decades as integers
     selected_years = [int(year) for year in selected_years]
     
-    movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities, only_gpt)
+    movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities, only_gpt, gpt_filters)
     
 
     #gets mappings to movie
@@ -116,7 +123,7 @@ def generate_movies():
     #gets movie that is in the dataset
     while not (movie in movies['title'].values):
         #bypasses mappings and goes straight to chat gpt
-        movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities, only_gpt)
+        movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities, only_gpt, gpt_filters)
     #print(movie)
     
     movie_names = []
@@ -160,7 +167,7 @@ def generate_movies():
         movie = ''
         for i in range(3):
             #bypasses mappings and goes straight to chat gpt
-            movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities, only_gpt, movie_names)
+            movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities, only_gpt, gpt_filters, movie_names)
             print(movie)
             movie_names.append(movie)
     #generates the response

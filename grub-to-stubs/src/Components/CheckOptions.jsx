@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CheckOptions.css';
 
-const CheckOptions = ({ title, options, type, onChange }) => {
+const CheckOptions = ({ title, options, type, onChange, GPTChecked }) => {
+  const [showTextBox, setShowTextBox] = useState(false);
+
   const handleCheckboxChange = (option) => {
     onChange(type, option);
+    
+    
+    // Check if the checkbox is the "onlyGPT" checkbox
+    if (type === "onlyGPT") {
+      setShowTextBox(!GPTChecked);
+    }
   };
 
   return (
@@ -24,6 +32,12 @@ const CheckOptions = ({ title, options, type, onChange }) => {
           </li>
         ))}
       </ul>
+      {showTextBox && (
+        <div className="text-box-container">
+          <label htmlFor="GPTFilters">Custom Filters (Optional):</label>
+          <input type="text" id="GPTFilters" />
+        </div>
+      )}
     </div>
   );
 };

@@ -10,7 +10,7 @@ function App() {
   const genreList = ["Documentary", "Mystery", "Children", "Action", "Sci-Fi", "Comedy", "Thriller", "Western", "War", "Romance", "IMAX", "Horror", "Drama", "Film-Noir",
     "Crime", "Animation", "Musical", "Fantasy", "Adventure"];
   const yearsList = ["1950", "1960", "1970", "1980", "1990", "2000", "2010"];
-  const popularityList = ["1", "2", "3", "4", "5"]
+  const popularityList = ["1", "2", "3", "4", "5"];
 
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
@@ -19,6 +19,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState([]);
   const [onlyGPT, setOnlyGPT] = useState(false);
+  
+
 
   const handleCheckboxChange = (type, option) => {
     switch (type) {
@@ -32,15 +34,18 @@ function App() {
         updateSelectedOptions(selectedPopularities, setSelectedPopularities, option);
         break;
       default:
-	  	setSelectedGenres([]);
-		setSelectedYears([]);
-		setSelectedPopularities([]);
-		setGPTMessage([]);
-		setOnlyGPT(false);
-		document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+        setSelectedGenres([]);
+        setSelectedYears([]);
+        setSelectedPopularities([]);
+        setGPTMessage([]);
+        setOnlyGPT(false);
+        document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+        const gptFilters = document.getElementById('GPTFilters');
+        gptFilters.value = '';
+        
+        
         break;
     }
-
   };
 
   const updateSelectedOptions = (prevOptions, setOptions, option) => {
@@ -55,7 +60,7 @@ function App() {
 
   const handleYesCheckboxChange = () => {
     setOnlyGPT((prevOnlyGPT) => !prevOnlyGPT);
-    console.log(onlyGPT);
+    
   };
 
   const scrollToBottom = () => {
@@ -74,7 +79,10 @@ function App() {
 
   const generateMovieRecomendations = async (selectedFood) => {
     try {
-      setIsLoading(true); // Set loading to true when the API call starts
+      setIsLoading(true);
+
+      const gptFilters = document.getElementById('GPTFilters');
+      const gptFiltersValue = gptFilters.value;
 
       const response = await fetch('http://127.0.0.1:5000/api/generate-movies', {
         method: 'POST',
@@ -87,6 +95,7 @@ function App() {
           selectedYears,
           selectedPopularities,
           onlyGPT,
+          gptFilters: gptFiltersValue,
         }),
       });
 
@@ -101,7 +110,7 @@ function App() {
     } catch (error) {
       console.error('Fetch error:', error);
     } finally {
-      setIsLoading(false); // Set loading back to false when the API call completes
+      setIsLoading(false);
       scrollToBottom();
       const genresText = selectedGenres.length > 0 ? ` in the ${formatList(selectedGenres)} genre(s)` : '';
       const yearsText = selectedYears.length > 0 ? ` that were released in the decade(s) of ${formatList(selectedYears)}` : '';
@@ -112,8 +121,6 @@ function App() {
       setResponseMessage(message);
     }
   };
-
-
 
   return (
     <div className="app-container">
@@ -146,17 +153,18 @@ function App() {
           title="Our recommendations come from a mix of ChatGPT and our own model. Would you like them to come purely from ChatGPT (experimental)?"
           options={["Yes"]}
           type="onlyGPT"
+          GPTChecked={onlyGPT}
           onChange={handleYesCheckboxChange}
         />
-	  </div>
+      </div>
       <div className="clear-button-container">
-		<button 
-			type="reset"
-			className="clear-button"
-			onClick={handleCheckboxChange}
-		>Clear Filters</button>
-	  </div>
-	  <div className="food-form-container">
+        <button
+          type="reset"
+          className="clear-button"
+          onClick={() => handleCheckboxChange()}  // Pass an empty argument to clear all filters
+        >Clear Filters</button>
+      </div>
+      <div className="food-form-container">
         <FoodForm onSubmit={generateMovieRecomendations} />
       </div>
       <div className="response-container">
