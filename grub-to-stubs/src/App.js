@@ -32,6 +32,12 @@ function App() {
         updateSelectedOptions(selectedPopularities, setSelectedPopularities, option);
         break;
       default:
+	  	setSelectedGenres([]);
+		setSelectedYears([]);
+		setSelectedPopularities([]);
+		setGPTMessage([]);
+		setOnlyGPT(false);
+		document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
         break;
     }
 
@@ -142,6 +148,7 @@ function App() {
           type="onlyGPT"
           onChange={handleYesCheckboxChange}
         />
+		<button type="reset" onClick={handleCheckboxChange}>Clear Filters</button>
       </div>
       <div className="food-form-container">
         <FoodForm onSubmit={generateMovieRecomendations} />
