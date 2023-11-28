@@ -148,9 +148,15 @@ function App() {
           type="onlyGPT"
           onChange={handleYesCheckboxChange}
         />
-		<button type="reset" onClick={handleCheckboxChange}>Clear Filters</button>
-      </div>
-      <div className="food-form-container">
+	  </div>
+      <div className="clear-button-container">
+		<button 
+			type="reset"
+			className="clear-button"
+			onClick={handleCheckboxChange}
+		>Clear Filters</button>
+	  </div>
+	  <div className="food-form-container">
         <FoodForm onSubmit={generateMovieRecomendations} />
       </div>
       <div className="response-container">

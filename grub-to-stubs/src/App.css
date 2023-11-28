@@ -15,6 +15,11 @@
   background-color: #e5e4e2;
 }
 
+.clear-button-container {
+	width: 100%;
+	text-align: center;
+}
+
 .food-form-container {
   margin-top: 30px; 
   
@@ -56,4 +61,16 @@
 .preferences-title {
   margin-left: 40px;
   font-size: 40px;
+}
+
+.clear-button {
+	display: inline-block;
+	padding: 10px 20px;
+	border-radius: 10px;
+	background-color: maroon;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	margin: 0 auto;
 }
