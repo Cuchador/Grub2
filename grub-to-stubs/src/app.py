@@ -33,10 +33,10 @@ def openAiMovieRequest(food, genres, decades, popularities, only_gpt, gpt_filter
 
         
     
-    message += '. Send the response in the format: "Name (year)" where Name is the name of the movie and year is the year that movie was released'
-    message += ' and include absolutely nothing else in your response.'
+    message += '. Send the response in the format: "Name (year) [explanation]" where Name is the name of the movie and year is the year that movie was released and explanation is one setnence explaining why you are suggesting this movie. If you have suggested a movie before, give me a different movie.'
+    message += ' Include absolutely nothing else in your response.'
     openai.api_key= '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'
-    print(message)
+    # print(message)
     try:
         SYSTEM_PROMPT = f"""You are a movie reccomendation AI assistant.
         You will be given a food and (optionally) sets of one or more genres, decades,
@@ -47,6 +47,7 @@ def openAiMovieRequest(food, genres, decades, popularities, only_gpt, gpt_filter
             {'role': 'user', 'content': message}]
                                                        )
         content = chat_completion['choices'][0]['message']['content']
+        print(content)
         return content
     except openai.error.ServiceUnavailableError as e:
         print(f"ServiceUnavailableError: {e}")
@@ -124,8 +125,10 @@ def generate_movies():
     while not (movie in movies['title'].values):
         #bypasses mappings and goes straight to chat gpt
         movie = openAiMovieRequest(selected_food, selected_genres, selected_years, selected_popularities, only_gpt, gpt_filters)
-    #print(movie)
-    
+        movie = movie.split(' [')[0]
+        print(f"trying: {movie}")
+   
+    print(f"movie: {movie}")
     movie_names = []
     if (not only_gpt):
         #creates data frame for latent factors
